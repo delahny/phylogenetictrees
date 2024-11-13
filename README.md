@@ -1,5 +1,6 @@
 # Constructing phylogenetic trees
-The R script in this repository constructs phylogenetic trees for *known* clonally related cells. It will identify shared and unqiue somatic mutations within clonally related cells and construct a tree based on these mutations.
+The R script in this repository constructs phylogenetic trees for *known* clonally related cells. It will identify shared and unqiue somatic mutations within clonally related cells and construct a tree based on these mutations. Trunk and branch distances are proportional to the number of shared and unique somatic mutations between cells. The identity of each cell is labeled at the terminus of each tree.
+
 
 *Note: Cells with clonal relationships should already be established before running this script.* 
 
@@ -14,7 +15,7 @@ The example input file provided here was generated using a number of steps. Afte
 2. To supplement MuTect calls, variants were called against the reference genome using UnifiedGenotyper and FreeBayes. These variant callers were incorporated to identify any point mutations missed by MuTect. Variants from this list that were likely germline SNPs were removed and variants that were not filtered out were considered somatic mutations and added to the list of somatic variants (mutation list) called by MuTect.
 3. Upon generation of the mutation list for each sample, all genome_changes were compiled in an excel sheet with their respective sample_IDs, sorted by Genome_Change and using a simple excel equation, overlapping mutations were identified.
 4. Mpileup was then run on the list of unique mutations within subsets of clonally related cells to find mutations that were missed in some samples due to set Mutect2 parameters. These mutations were then added to each sample's final list of mutations.
-5. A simple Rscript was then used to concatenate the mutation lists from groups of related samples.
+5. A simple Rscript was then used to concatenate the mutation lists from groups of related samples. Only cells sequenced with same baits are combined.
    - Note: only samples within the same phylogeny can be combined in one input sheet. If there is more than one group of clonally related cells in the sheet (i.e. would be more than one phylogenetic tree), they should be separated out into different sheets and the script should be run separately on each group of related cells.
      - For example; Donor A has cells 1, 2, 3, 4, 5, 6 and 7. Within this donor, cells 1, 2, 3 and 4 are clonally related (let's call this Group A), while cells 6 and 7 are clonally related as well (let's call this Group B). In this case, Group A and B are not related to each other although individually they have clonal relationships. Therefore, you should have 2 input sheets to run separately; one for Group A and one for Group B.
 
