@@ -3,12 +3,21 @@ The R script in this repository constructs phylogenetic trees for *known* clonal
 
 *Note: Cells with clonal relationships should already be established before running this script.* 
 
-Refer to the "Preparation of the Input Sheet" section for a detailed description of this requirement.
-
 ### Installation
-The necessary R package dependencies will not be installed upon running the script. Please make sure readxl, dplyr, tidyr and ggplot2 have been installed prior to running. This script has been verified to run on R 4.2.2 and higher.
+The necessary R package dependencies will not be installed upon running the script. Please make sure dplyr, tidyr, ggplot2 and readxl have been installed prior to running. This script has been verified to run on R 4.2.2 and higher.
 
-### Preparation of the Input Sheet
+### Running the Script
+At minimum, this script requires an excel sheet containing 2 columns named: "Genome_Change" and "ID". The script iterates through the Genome_Change column to find reptitions and creates subsets of clonal relationships based on its occurence within each subset. Therefore, the sheet should be a concatenation of somatic mutations (rows) from the set of clonally related cells (as mentioned in point 5 above), and each mutation (row) should have a corresponding sample ID from which it was extracted. 
+
+*Note*: Your input sheet DOES NOT need to be in the same format as the Genome_Change column in our example sheet; as long as the Genome_Change column are represented in a similar manner for all cells within your dataset, the script should be able to find repitions between cells and extract the *ovelapping and unique mutations*.
+
+Refer to the "Preparation of our Input Sheet" section for a detailed description of how our sheet was build if you are interested in replicating this sheet.
+
+Using the example input file provided here, the command to run the script would be:
+
+	Rscript phylogenetic_tree_generation.R All_D56_Mutations.xlsx
+ 
+### Preparation of our Input Sheet
 The example input file provided here was generated using a number of steps. After aligning sequencing data from genomic DNA to the hg19 version of the genome with BWA and deduplicating with Picard, the reads underwent additional curation to realign indels called with Pindel, and recalibrate base quality using GATK. Then:
 1. MuTect2 was used to generate a candidate list of point mutations by comparing the aligned bam files of each cell to the bam files representing the respective patient’s normal DNA.
 2. To supplement MuTect calls, variants were called against the reference genome using UnifiedGenotyper and FreeBayes. These variant callers were incorporated to identify any point mutations missed by MuTect. Germline SNPs were removed and variants that were not filtered out were considered somatic mutations and added to the list of somatic variants (mutation list) called by MuTect.
@@ -17,11 +26,4 @@ The example input file provided here was generated using a number of steps. Afte
 5. A simple Rscript was then used to concatenate the mutation lists from groups of related samples. Only cells sequenced with same baits are combined.
    - Note: only samples within the same phylogeny can be combined in one input sheet. If there is more than one group of clonally related cells in the sheet (i.e. would be more than one phylogenetic tree), they should be separated out into different sheets and the script should be run separately on each group of related cells.
      - For example; Donor A has cells 1, 2, 3, 4, 5, 6 and 7. Within this donor, cells 1, 2, 3 and 4 are clonally related (let's call this Group A), while cells 6 and 7 are clonally related as well (let's call this Group B). In this case, Group A and B are not related to each other although individually they have clonal relationships. Therefore, you should have 2 input sheets to run separately; one for Group A and one for Group B.
-
-### Running the Script
-At minimum, this script requires an excel sheet containing 2 columns named: "Genome_Change" and "ID". The script iterates through the Genome_Change column to find reptitions and creates subsets of clonal relationships based on its occurence within each subset. Therefore, the sheet should be a concatenation of somatic mutations (rows) from the set of clonally related cells (as mentioned in point 5 above), and each mutation (row) should have a corresponding sample ID from which it was extracted. This sheet does not need to be in the same format as the Genome_Change in the sheet provided here; as long as the Genome_Change column contains the repitions between cells and will be able to extract the *ovelapping mutations*.
-
-
-Using the example input file provided here, the command to run the script would be:
-
-	Rscript phylogenetic_tree_generation.R All_D56_Mutations.xlsx
+6. In the sheet provided, all other columns from our final list of mutations have been removed for simplicity, however this is not a requirement.
