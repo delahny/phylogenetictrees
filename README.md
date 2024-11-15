@@ -24,7 +24,7 @@ The example input file provided here was generated using a number of steps. Afte
 1. MuTect2 was used to generate a candidate list of point mutations by comparing the aligned bam files of each cell to the bam files representing the respective patient’s normal DNA.
 2. To enhance rigor, variants were called against the reference genome using both UnifiedGenotyper and FreeBayes. These additional variant callers were included to identify any point mutations potentially missed by MuTect. Germline SNPs were filtered out, and the remaining variants were added to the list of somatic variants identified by MuTect.
 3. Indels identified using Pindel were also added to the list of variants.
-4. This list of variants was scrtinuzed as described previously by Tang et al.(Nature, 2020) to remove artifacts.
+4. This list of variants was scrutinized as described previously by Tang et al.(Nature, 2020) to remove artifacts.
 5. After generating the mutation list for each sample, the mutations from all samples were compiled into an Excel sheet with their respective sample_IDs, organized by "Genome_Change" column.
 6. Overlapping mutations were identified between samples based on the recurrence of specific mutations across different samples.
 7. The remaining non-overlapping mutations were further scrutinized by running Mpileup on each sample to rule out exclusion due to preset Mutect2 parameters. If identified, these mutations were added to the respective sample's list of mutations.
