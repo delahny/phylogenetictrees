@@ -1,3 +1,4 @@
+#!/usr/bin/env Rscript
 ##Author: Delahny Deivendran
 ## 19 Nov 2024
 # Load required libraries
